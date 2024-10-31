@@ -64,6 +64,8 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Move); // Our Movement Binding
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Look); // Our Look Binding
+		
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ABaseCharacter::Fire);
 	}
 }
 
@@ -84,5 +86,24 @@ void ABaseCharacter::Look(const FInputActionValue& value)
 	FRotator TargetRot = FMath::RInterpTo(GetControlRotation(), FVector(lookInput.Y, lookInput.X, 0).ToOrientationRotator(), GetWorld()->GetDeltaSeconds(), 20.0f);
 
 	Controller->SetControlRotation(TargetRot);
+}
+
+void ABaseCharacter::Fire()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bang!"));
+
+	if (Projectile == nullptr) { return; } // Return if projectile is invalid
+
+
+	FVector Location = GetActorLocation();
+	FRotator Rotation = GetActorForwardVector().ToOrientationRotator();
+	FActorSpawnParameters SpawnParams;
+
+	GetWorld()->SpawnActor<ABaseProjectile>(Projectile.Get(), Location, Rotation, SpawnParams);
+}
+
+void ABaseCharacter::ApplyDamage(float Damage)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Damaged: %f"),Damage));
 }
 

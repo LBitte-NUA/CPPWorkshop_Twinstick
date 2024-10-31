@@ -5,11 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "BaseProjectile.h"
+#include "DamageInterface.h"
 
 #include "BaseCharacter.generated.h"
 
+
 UCLASS(Abstract)
-class MYTWINSTICK_API ABaseCharacter : public ACharacter
+class MYTWINSTICK_API ABaseCharacter : public ACharacter, public IDamageInterface
 {
 	GENERATED_BODY()
 
@@ -40,12 +43,17 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
 	class UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
+	class UInputAction* FireAction;
 
 	// Base Movement Function to link with movement Input
 	void Move(const FInputActionValue& value);
 
 	// Independant Look Functions for Gamepad and Mouse
 	void Look(const FInputActionValue& value);
+
+	// My Fire Action
+	void Fire();
 
 	class APlayerController* PlayerCon;
 	APlayerController* GetPlayerController() { return PlayerCon; }
@@ -59,4 +67,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Camera", meta = (AllowPrivateAccess = "True"))
 	class UCameraComponent* Camera;
 
+	//The Projectile we wish to spawn
+	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (AllowPrivateAccess = "True"))
+	TSubclassOf<ABaseProjectile> Projectile;
+
+public:
+	virtual void ApplyDamage(float Damage) override;
 };
