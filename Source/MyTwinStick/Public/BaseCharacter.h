@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "BaseProjectile.h"
 #include "DamageInterface.h"
 
 #include "BaseCharacter.generated.h"
@@ -69,8 +68,11 @@ protected:
 
 	//The Projectile we wish to spawn
 	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (AllowPrivateAccess = "True"))
-	TSubclassOf<ABaseProjectile> Projectile;
+	TSubclassOf<class ABaseProjectile> Projectile;
 
 public:
-	virtual void ApplyDamage(float Damage) override;
+	void ApplyDamage_Implementation(AActor* Dealer,float Damage) override;
+	
+	float GetHealth_Implementation() override;
+	
 };

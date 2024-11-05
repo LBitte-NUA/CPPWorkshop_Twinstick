@@ -8,6 +8,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "BaseProjectile.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -65,7 +66,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Move); // Our Movement Binding
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Look); // Our Look Binding
 		
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ABaseCharacter::Fire);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ABaseCharacter::Fire); // Our Fire Binding
 	}
 }
 
@@ -85,25 +86,37 @@ void ABaseCharacter::Look(const FInputActionValue& value)
 	// Smooth rotate our character towards the target location
 	FRotator TargetRot = FMath::RInterpTo(GetControlRotation(), FVector(lookInput.Y, lookInput.X, 0).ToOrientationRotator(), GetWorld()->GetDeltaSeconds(), 20.0f);
 
+	// Set the Control rotation to our target rotation
 	Controller->SetControlRotation(TargetRot);
 }
 
+// Used for our Fire Input Action to spawn a projectile 
 void ABaseCharacter::Fire()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bang!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bang!"));
 
 	if (Projectile == nullptr) { return; } // Return if projectile is invalid
 
 
+	// Create the Transform parameters for our projectile spawn.
 	FVector Location = GetActorLocation();
-	FRotator Rotation = GetActorForwardVector().ToOrientationRotator();
+	float AimOffset = FMath::FRandRange(-1.0, 1.0) * 0.05; // The last multiplier value is the max aim offset 
+	FRotator Rotation = FVector(GetActorForwardVector().X + AimOffset, GetActorForwardVector().Y + AimOffset, 0.f).ToOrientationRotator();
+
 	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this; //Set the owner of the projectile to the character.
 
 	GetWorld()->SpawnActor<ABaseProjectile>(Projectile.Get(), Location, Rotation, SpawnParams);
 }
 
-void ABaseCharacter::ApplyDamage(float Damage)
+void ABaseCharacter::ApplyDamage_Implementation(AActor* Dealer, float Damage)
 {
+	// Debug text for when the character is 'damaged'
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Damaged: %f"),Damage));
+}
+
+float ABaseCharacter::GetHealth_Implementation()
+{
+	return 100.f; // Return health value
 }
 

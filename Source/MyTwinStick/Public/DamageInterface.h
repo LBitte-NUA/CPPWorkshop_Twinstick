@@ -23,12 +23,9 @@ class MYTWINSTICK_API IDamageInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	UFUNCTION()
-	virtual void ApplyDamage(float Damage);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ApplyDamage(AActor* Dealer, float Damage);
 
-	UFUNCTION()
-	virtual void NativeEvent();
-
-	UFUNCTION()
-	virtual float GetHealth();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	float GetHealth();
 };

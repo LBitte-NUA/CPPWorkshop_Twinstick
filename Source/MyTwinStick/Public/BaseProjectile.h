@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BaseProjectile.generated.h"
 
-UCLASS()
+// Abstract Property 'hides' the C++ Class from the editor. Only derived classes are seen.
+UCLASS(Abstract)
 class MYTWINSTICK_API ABaseProjectile : public AActor
 {
 	GENERATED_BODY()

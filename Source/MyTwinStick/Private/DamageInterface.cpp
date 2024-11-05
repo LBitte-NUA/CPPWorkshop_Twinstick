@@ -5,15 +5,4 @@
 
 // Add default functionality here for any IDamageInterface functions that are not pure virtual.
 
-void IDamageInterface::ApplyDamage(float Damage)
-{
-}
-
-void IDamageInterface::NativeEvent()
-{
-}
-
-float IDamageInterface::GetHealth()
-{
-	return 0.0f;
-}
+// We do not add cpp implementation for BlueprintNativeEvents in an Interface

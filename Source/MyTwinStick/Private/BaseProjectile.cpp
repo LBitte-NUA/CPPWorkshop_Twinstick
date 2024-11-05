@@ -6,6 +6,9 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "DamageInterface.h"
 
+// Define ECC_Projectile as a pre existing Engine Collision Channel
+#define ECC_Projectile ECollisionChannel::ECC_GameTraceChannel1
+
 // Sets default values
 ABaseProjectile::ABaseProjectile()
 {
@@ -14,7 +17,8 @@ ABaseProjectile::ABaseProjectile()
 
 	Collider->OnComponentBeginOverlap.AddDynamic(this, &ABaseProjectile::OnOverlap);
 	Collider->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	Collider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Collider->SetCollisionObjectType(ECC_Projectile);
+	Collider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	Movement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement"));
 	Movement->InitialSpeed = 500.f;
@@ -29,17 +33,20 @@ void ABaseProjectile::BeginPlay()
 	
 }
 
+
+// Called on our Projectile Collision Overlapping with 'something'
 void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("HIt Something"));
-	if (OtherActor != nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit Actor"));
-		if (IDamageInterface* DamagedActor = Cast<IDamageInterface>(OtherActor))
-		{
-			DamagedActor->ApplyDamage(50.f);
-		}
+	if (OtherActor == nullptr) { return; } // Return if Invalid Hit
 
+	if (OtherActor == GetOwner()) { return; } // Return if Hit Actor is Owner
+
+	if (OtherActor->Implements<UDamageInterface>())
+	{
+		IDamageInterface::Execute_ApplyDamage(OtherActor, GetOwner(), FMath::RandRange(5, 10));
+
+		//float health = IDamageInterface::Execute_GetHealth(OtherActor);
+		//UE_LOG(LogTemp, Warning, TEXT("Health: %f"), health);
 	}
 }
 
