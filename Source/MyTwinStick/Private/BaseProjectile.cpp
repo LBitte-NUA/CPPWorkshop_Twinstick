@@ -41,9 +41,11 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 
 	if (OtherActor == GetOwner()) { return; } // Return if Hit Actor is Owner
 
-	if (OtherActor->Implements<UDamageInterface>())
+	if (UDamageInterface* HealthComponent = OtherActor->FindComponentByInterface<UDamageInterface>())
 	{
-		IDamageInterface::Execute_ApplyDamage(OtherActor, GetOwner(), FMath::RandRange(5, 10));
+		IDamageInterface::Execute_ApplyDamage(HealthComponent, GetOwner(), 8.f);
+		 
+		// IDamageInterface::Execute_ApplyDamage(OtherActor, GetOwner(), FMath::RandRange(5, 10));
 
 		//float health = IDamageInterface::Execute_GetHealth(OtherActor);
 		//UE_LOG(LogTemp, Warning, TEXT("Health: %f"), health);

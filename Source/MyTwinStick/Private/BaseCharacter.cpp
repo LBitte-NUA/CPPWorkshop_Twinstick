@@ -93,8 +93,6 @@ void ABaseCharacter::Look(const FInputActionValue& value)
 // Used for our Fire Input Action to spawn a projectile 
 void ABaseCharacter::Fire()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bang!"));
-
 	if (Projectile == nullptr) { return; } // Return if projectile is invalid
 
 
@@ -109,6 +107,7 @@ void ABaseCharacter::Fire()
 	GetWorld()->SpawnActor<ABaseProjectile>(Projectile.Get(), Location, Rotation, SpawnParams);
 }
 
+/*
 void ABaseCharacter::ApplyDamage_Implementation(AActor* Dealer, float Damage)
 {
 	// Debug text for when the character is 'damaged'
@@ -119,4 +118,5 @@ float ABaseCharacter::GetHealth_Implementation()
 {
 	return 100.f; // Return health value
 }
+*/
 

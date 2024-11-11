@@ -5,13 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "DamageInterface.h"
 
 #include "BaseCharacter.generated.h"
 
 
 UCLASS(Abstract)
-class MYTWINSTICK_API ABaseCharacter : public ACharacter, public IDamageInterface
+class MYTWINSTICK_API ABaseCharacter : public ACharacter 
 {
 	GENERATED_BODY()
 
@@ -70,9 +69,4 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (AllowPrivateAccess = "True"))
 	TSubclassOf<class ABaseProjectile> Projectile;
 
-public:
-	void ApplyDamage_Implementation(AActor* Dealer,float Damage) override;
-	
-	float GetHealth_Implementation() override;
-	
 };
