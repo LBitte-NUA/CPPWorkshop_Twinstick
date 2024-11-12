@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "InputActionValue.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -26,47 +25,18 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-private:
-
-	// Declare our Mapping Context and Input Actions
-	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
-	class UInputMappingContext* DefaultMappingContext;
-
-	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
-	class UInputAction* MoveAction;
-
-	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
-	class UInputAction* LookAction;
-
-	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
-	class UInputAction* FireAction;
-
-	// Base Movement Function to link with movement Input
-	void Move(const FInputActionValue& value);
-
-	// Independant Look Functions for Gamepad and Mouse
-	void Look(const FInputActionValue& value);
-
-	// My Fire Action
-	void Fire();
-
-	class APlayerController* PlayerCon;
-	APlayerController* GetPlayerController() { return PlayerCon; }
 
 protected:
-	// Forward Declare the SpringArm Component
-	UPROPERTY(EditAnywhere, Category = "Camera", meta = (AllowPrivateAccess = "True"))
-	class USpringArmComponent* SpringArm;
+	//The Health Component
+	UPROPERTY(EditAnywhere, Category = "Health", meta = (AllowPrivateAccess = "True"))
+	class UHealthComponent* HealthComponent;
 
-	// Forward Declare the Camera Component
-	UPROPERTY(EditAnywhere, Category = "Camera", meta = (AllowPrivateAccess = "True"))
-	class UCameraComponent* Camera;
+public:
+	// Our Attack Function which can be called and overwritten in BP
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Attack();
 
-	//The Projectile we wish to spawn
-	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (AllowPrivateAccess = "True"))
-	TSubclassOf<class ABaseProjectile> Projectile;
-
+protected:
+	// Internal Attack function that exists solely in C++
+	virtual void Attack_Internal();
 };

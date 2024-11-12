@@ -48,6 +48,7 @@ void UHealthComponent::IncreaseHealth_Internal(float value)
 	{
 		Health += value; // Health = Health + Value
 	}
+	OnHealthModified.Broadcast(Health);
 }
 
 void UHealthComponent::DecreaseHealth_Internal(float value)
@@ -66,8 +67,8 @@ void UHealthComponent::DecreaseHealth_Internal(float value)
 
 void UHealthComponent::Death()
 {
-	UE_LOG(LogTemp, Warning, TEXT("DEATH"));
-	GetOwner()->Destroy();
+	UE_LOG(LogTemp, Warning, TEXT("%s - Has Died"), *GetOwner()->GetActorNameOrLabel());
+	OnDeath.Broadcast();
 }
 
 void UHealthComponent::ApplyDamage_Implementation(AActor* Dealer, float Damage)

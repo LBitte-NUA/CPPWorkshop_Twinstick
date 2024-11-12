@@ -10,6 +10,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthModifiedSignature, float, newHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathSignature);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MYTWINSTICK_API UHealthComponent : public UActorComponent, public IDamageInterface
@@ -41,6 +42,7 @@ public:
 	void SetMaxHealth(float value) { MaxHealth = value; } // Set mmax Health
 	float GetMaxHealth(){return MaxHealth;} // Get Max Health
 
+	UFUNCTION(BlueprintCallable)
 	void ResetHealth() { Health = MaxHealth; } // Reset Health to Max Health
 
 private:
@@ -54,4 +56,7 @@ public:
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnHealthModifiedSignature OnHealthModified;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnDeathSignature OnDeath;
 };

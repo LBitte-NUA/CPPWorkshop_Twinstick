@@ -45,11 +45,9 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 	{
 		IDamageInterface::Execute_ApplyDamage(HealthComponent, GetOwner(), 8.f);
 		 
-		// IDamageInterface::Execute_ApplyDamage(OtherActor, GetOwner(), FMath::RandRange(5, 10));
-
-		//float health = IDamageInterface::Execute_GetHealth(OtherActor);
-		//UE_LOG(LogTemp, Warning, TEXT("Health: %f"), health);
 	}
+
+	this->Destroy(); // Destroy Projectile if hit something.
 }
 
 
