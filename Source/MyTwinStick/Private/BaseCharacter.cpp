@@ -3,6 +3,7 @@
 
 #include "BaseCharacter.h"
 #include "BaseProjectile.h"
+#include "Components/ArrowComponent.h"
 #include "HealthComponent.h"
 
 // Sets default values
@@ -13,6 +14,9 @@ ABaseCharacter::ABaseCharacter()
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
 	HealthComponent->SetMaxHealth(100.f);
+
+	// Show the direction the character is facing.
+	GetArrowComponent()->SetHiddenInGame(false);
 }
 
 // Called when the game starts or when spawned

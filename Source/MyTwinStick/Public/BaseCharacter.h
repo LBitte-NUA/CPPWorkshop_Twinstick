@@ -28,7 +28,7 @@ public:
 
 protected:
 	//The Health Component
-	UPROPERTY(EditAnywhere, Category = "Health", meta = (AllowPrivateAccess = "True"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = "True"))
 	class UHealthComponent* HealthComponent;
 
 public:

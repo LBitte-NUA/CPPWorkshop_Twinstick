@@ -73,6 +73,8 @@ void UHealthComponent::Death()
 
 void UHealthComponent::ApplyDamage_Implementation(AActor* Dealer, float Damage)
 {
+	if (GetOwner() == Dealer) { return; } // Don't do Damage to SELF!
+
 	DecreaseHealth_Internal(Damage);
 }
 
