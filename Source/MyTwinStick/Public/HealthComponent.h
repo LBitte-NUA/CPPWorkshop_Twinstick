@@ -59,4 +59,11 @@ public:
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnDeathSignature OnDeath;
+
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta =(AllowPrivateAccess = "True"))
+	ETeam Team;
+
+public:
+	ETeam GetTeam_Implementation() override { return Team; }
 };

@@ -6,6 +6,14 @@
 #include "UObject/Interface.h"
 #include "DamageInterface.generated.h"
 
+UENUM(BlueprintType)
+enum class ETeam : uint8
+{
+	Monster, // 0
+	Player,  // 1
+	Team_MAX UMETA(Hidden)
+};
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UDamageInterface : public UInterface
@@ -28,4 +36,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	float GetHealth();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	ETeam GetTeam();
 };

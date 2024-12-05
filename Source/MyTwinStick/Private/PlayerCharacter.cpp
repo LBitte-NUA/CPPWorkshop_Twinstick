@@ -63,7 +63,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move); // Our Movement Binding
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look); // Our Look Binding
 
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ABaseCharacter::Attack); // Bind Fire action to Attack
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Attack); // Bind Fire action to Attack
 	}
 }
 
@@ -87,21 +87,6 @@ void APlayerCharacter::Look(const FInputActionValue& value)
 	Controller->SetControlRotation(TargetRot);
 }
 
-// Our Attack Function
-void APlayerCharacter::Attack_Internal()
-{
-	if (Projectile == nullptr) { return; } // Return if projectile is invalid
-
-	// Create the Transform parameters for our projectile spawn.
-	FVector Location = GetActorLocation();
-	float AimOffset = FMath::FRandRange(-1.0, 1.0) * 0.05; // The last multiplier value is the max aim offset 
-	FRotator Rotation = FVector(GetActorForwardVector().X + AimOffset, GetActorForwardVector().Y + AimOffset, 0.f).ToOrientationRotator();
-
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this; //Set the owner of the projectile to the character.
-
-	GetWorld()->SpawnActor<ABaseProjectile>(Projectile.Get(), Location, Rotation, SpawnParams);
-}
 
 
 

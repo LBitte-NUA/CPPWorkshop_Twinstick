@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = "True"))
 	class UHealthComponent* HealthComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "True"))
+	class UWeaponComponent* WeaponComponent;
+
 public:
 	// Our Attack Function which can be called and overwritten in BP
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)

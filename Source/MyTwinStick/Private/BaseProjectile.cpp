@@ -43,8 +43,14 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 
 	if (UDamageInterface* HealthComponent = OtherActor->FindComponentByInterface<UDamageInterface>())
 	{
-		IDamageInterface::Execute_ApplyDamage(HealthComponent, GetOwner(), 8.f);
-		 
+		if (IDamageInterface::Execute_GetTeam(HealthComponent) != IDamageInterface::Execute_GetTeam(GetOwner()->FindComponentByInterface<UDamageInterface>()))
+		{
+			IDamageInterface::Execute_ApplyDamage(HealthComponent, GetOwner(), 8.f);
+		}
+		else
+		{
+			return;
+		}
 	}
 
 	this->Destroy(); // Destroy Projectile if hit something.

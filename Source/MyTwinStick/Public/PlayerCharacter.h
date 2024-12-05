@@ -53,7 +53,7 @@ private: /* Declare our Input Actions & Mappings */
 
 	void Look(const FInputActionValue& value);
 
-	void Attack_Internal() override;
+	//void Attack_Internal() override;
 
 
 protected: /* Declare our default components */

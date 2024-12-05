@@ -5,6 +5,7 @@
 #include "BaseProjectile.h"
 #include "Components/ArrowComponent.h"
 #include "HealthComponent.h"
+#include "WeaponComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -14,6 +15,8 @@ ABaseCharacter::ABaseCharacter()
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
 	HealthComponent->SetMaxHealth(100.f);
+
+	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>(TEXT("Weapon Component"));
 
 	// Show the direction the character is facing.
 	GetArrowComponent()->SetHiddenInGame(false);
@@ -45,7 +48,8 @@ void ABaseCharacter::Attack_Implementation()
 
 void ABaseCharacter::Attack_Internal()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s: Default Attack - Override Event Attack"), *GetActorNameOrLabel());
+	WeaponComponent->FireWeapon();
+	//UE_LOG(LogTemp, Warning, TEXT("%s: Default Attack - Override Event Attack"), *GetActorNameOrLabel());
 }
 
 
