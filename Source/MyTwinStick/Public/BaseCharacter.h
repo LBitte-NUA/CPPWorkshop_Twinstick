@@ -35,11 +35,16 @@ protected:
 	class UWeaponComponent* WeaponComponent;
 
 public:
-	// Our Attack Function which can be called and overwritten in BP
+	// Our Attack/Reload Functions which can be called and overwritten in BP
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Attack();
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Reload();
+
 protected:
-	// Internal Attack function that exists solely in C++
+	// Internal Attack/Reload functions that exists solely in C++
 	virtual void Attack_Internal();
+
+	virtual void Reload_Internal();
 };

@@ -46,10 +46,20 @@ void ABaseCharacter::Attack_Implementation()
 	Attack_Internal();
 }
 
+void ABaseCharacter::Reload_Implementation()
+{
+	Reload_Internal();
+}
+
 void ABaseCharacter::Attack_Internal()
 {
 	WeaponComponent->FireWeapon();
 	//UE_LOG(LogTemp, Warning, TEXT("%s: Default Attack - Override Event Attack"), *GetActorNameOrLabel());
+}
+
+void ABaseCharacter::Reload_Internal()
+{
+	WeaponComponent->ReloadWeapon();
 }
 
 

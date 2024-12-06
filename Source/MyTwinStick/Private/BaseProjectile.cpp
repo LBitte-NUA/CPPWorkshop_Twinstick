@@ -45,7 +45,7 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 	{
 		if (IDamageInterface::Execute_GetTeam(HealthComponent) != IDamageInterface::Execute_GetTeam(GetOwner()->FindComponentByInterface<UDamageInterface>()))
 		{
-			IDamageInterface::Execute_ApplyDamage(HealthComponent, GetOwner(), 8.f);
+			IDamageInterface::Execute_ApplyDamage(HealthComponent, GetOwner(), Damage);
 		}
 		else
 		{

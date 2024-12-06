@@ -21,6 +21,7 @@ AWeapon* AWeapon::CreateWeapon(AActor* WeaponOwner, UWeaponDataAsset* WeaponTemp
 
 	weapon->Stats = WeaponTemplate->GetWeaponStats();
 	weapon->Projectile = WeaponTemplate->GetProjectile().LoadSynchronous();
+	weapon->Clip = weapon->Stats->ClipSize;
 
 	return weapon;
 }
@@ -28,8 +29,28 @@ AWeapon* AWeapon::CreateWeapon(AActor* WeaponOwner, UWeaponDataAsset* WeaponTemp
 // This Function is called by the weapon holder
 void AWeapon::Fire()
 {
-	// can we actually fire?
-	if (bCanFire)
+	// Do we have any bullets Currently?
+	if (Clip == 0)
+	{
+		Reload();
+	}
+
+	// Check our Fire Type
+	if (Stats->FireType == EW_FireType::Semi)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("HELD"));
+
+		// Start a short timer that is reset if we hold the fire button. (Never Releases while held)
+		GetWorldTimerManager().SetTimer(ReleaseHandle, FTimerDelegate::CreateLambda([&] { bReleasedFire = true; }), 0.01f, false);
+
+		// If we haven't released fire we return.
+		if (!bReleasedFire) { return; }
+		// If we've released fire we can continue
+		bReleasedFire = false;
+	}
+
+	// Can we Actuall Fire?
+	if (bCanFire && Clip > 0)
 	{
 		Fire_Internal();
 	}
@@ -37,15 +58,26 @@ void AWeapon::Fire()
 
 void AWeapon::Fire_Internal()
 {
+
 	bCanFire = false; // After firing, set canFire to false
 
 	// Set a timer to resetcanfire after fire Interval cooldown.
 	GetWorld()->GetTimerManager().SetTimer(FireHandle, this, &AWeapon::ResetCanFire, Stats->FireInterval, false);
 
-	for (int32 i = 1; i <= Stats->Bullets; i++)
+	// Check if we are currently reloading
+	if (GetWorldTimerManager().IsTimerActive(ReloadHandle))
+	{
+		//Cancel the reload upon firing.
+		GetWorldTimerManager().ClearTimer(ReloadHandle);
+		isReloading = false;
+	}
+
+	for (int32 i = 1; i <= Stats->BulletsPerShot; i++)
 	{
 		SpawnBullet();
 	}
+
+	Clip--;
 }
 
 void AWeapon::SpawnBullet()
@@ -57,17 +89,56 @@ void AWeapon::SpawnBullet()
 	// Create the Transform parameters for our projectile spawn.
 	FVector Location = GetOwner()->GetActorLocation();
 	FVector Direction = GetOwner()->GetActorForwardVector();
-	FVector AimOffset = FVector(FMath::RandRange(-Stats->AimOffset, Stats->AimOffset), // X
-								FMath::RandRange(-Stats->AimOffset, Stats->AimOffset), // Y
-								0.f);												   // Z
+	FVector AimOffset = FVector(FMath::RandRange(-Stats->BulletAimOffset, Stats->BulletAimOffset), // X
+								FMath::RandRange(-Stats->BulletAimOffset, Stats->BulletAimOffset), // Y
+								0.f);												               // Z
+
+
 	Direction += AimOffset;
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = GetOwner(); //Set the owner of the projectile to the character.
 
-	GetWorld()->SpawnActor<ABaseProjectile>(Projectile.Get(), Location, Direction.ToOrientationRotator(), SpawnParams);
+	auto Bullet = GetWorld()->SpawnActor<ABaseProjectile>(Projectile.Get(), Location, Direction.ToOrientationRotator(), SpawnParams);
+	Bullet->SetDamage(FMath::RandRange(Stats->MinDamage, Stats->MaxDamage));
+
 }
 
+void AWeapon::Reload()
+{
+	// Do nothing if we are reloading
+	if (isReloading == true) { return; }
 
+	isReloading = true;
+	GetWorldTimerManager().SetTimer(ReloadHandle, this, &AWeapon::Reload_Internal, Stats->ReloadInterval, false);
+	//UE_LOG(LogTemp, Warning, TEXT("Reloading"));
+}
+
+void AWeapon::Reload_Internal()
+{
+	switch (Stats->ReloadType)
+	{
+		// Reload Full Clip if reload type is Full
+	case EW_ReloadType::Full:
+		Clip = Stats->ClipSize;
+		break;
+		// Reload Single Shot if reload type is Single
+	case EW_ReloadType::Single:
+		if (Clip < Stats->ClipSize)
+		{
+			Clip++;
+		}
+		break;
+	default:
+		break;
+	}
+
+	isReloading = false;
+	// If Single clip Reload, Attempt to Continue Reloading.
+	if (Clip < Stats->ClipSize)
+	{
+		Reload();
+	}
+}
 
 

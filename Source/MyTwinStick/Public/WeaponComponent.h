@@ -22,6 +22,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 public:	
 	UPROPERTY(EditAnywhere)
 	UWeaponDataAsset* DefaultWeapon;
@@ -34,4 +36,9 @@ public:
 	void SetWeapon(AWeapon* weapon) { Weapon = weapon; }
 
 	void FireWeapon();
+	void ReloadWeapon();
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void EquipWeapon(AWeapon* newWeapon);
 };

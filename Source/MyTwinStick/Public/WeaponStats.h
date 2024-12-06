@@ -7,19 +7,59 @@
 /**
  * 
  */
+UENUM()
+enum class EW_FireType : uint8
+{
+	Automatic UMETA(DisplayName = "Automatic"),
+	Semi      UMETA(DisplayName = "Semi-Automatic"),
+	FireType_MAX UMETA(Hidden)
+};
+
+UENUM()
+enum class EW_ReloadType : uint8
+{
+	// Reload the entire clip
+	Full,
+	// Reload single shot.
+	Single,
+	ReloadType_MAX UMETA(Hidden)
+};
+
 USTRUCT(BlueprintType)
 struct MYTWINSTICK_API FWeaponStats
 {
 	GENERATED_BODY();
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(ClampMin = "1"))
+	// Minimum Weapon Damage Roll
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = "Damage", meta = (ClampMin = "1"))
 	int32 MinDamage = 1;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "1"))
+	// Maximum Weapon Damage Roll
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage", meta = (ClampMin = "1"))
 	int32 MaxDamage = 5;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0.01"))
+
+
+	// Time Between shots (in Seconds)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire Rate", meta = (ClampMin = "0.01"))
 	float FireInterval = 0.5f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "1"))
-	int32 Bullets = 1;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0"))
-	float AimOffset = 0;
+	// Weapon Fire Trigger Type
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire Rate")
+	EW_FireType FireType = EW_FireType::Automatic;
+
+	// Bullets Fired per shot
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = "Shot", meta = (ClampMin = "1", ClampMax = "20"))
+	int32 BulletsPerShot = 1;
+	// Accuracy variance per bullet (Lower = Better)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shot", meta = (ClampMin = "0"))
+	float BulletAimOffset = 0;
+
+
+	// Time to Reload (in Seconds)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reload", meta = (ClampMin = "0.01"))
+	float ReloadInterval = 1.2f;
+	// Reload Type
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reload")
+	EW_ReloadType ReloadType = EW_ReloadType::Full;
+	// Maximum Clip Size
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reload", meta = (ClampMin = "1"))
+	int32 ClipSize = 8;
+
 };

@@ -45,7 +45,9 @@ private: /* Declare our Input Actions & Mappings */
 		UInputAction* LookAction;
 
 	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
-		UInputAction* FireAction;
+	UInputAction* FireAction;
+	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
+	UInputAction* ReloadAction;
 
 		/* Declare our Input functions */
 
@@ -53,7 +55,6 @@ private: /* Declare our Input Actions & Mappings */
 
 	void Look(const FInputActionValue& value);
 
-	//void Attack_Internal() override;
 
 
 protected: /* Declare our default components */
@@ -66,10 +67,5 @@ protected: /* Declare our default components */
 	UPROPERTY(EditAnywhere, Category = "Camera", meta = (AllowPrivateAccess = "True"))
 		class UCameraComponent* Camera;
 
-protected: /* Declare our attack projectile*/
-
-	//The Projectile our actor spawns upon Firing
-	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (AllowPrivateAccess = "True"))
-		TSubclassOf<class ABaseProjectile> Projectile;
 	
 };

@@ -18,6 +18,7 @@ public:
 	// Sets default values for this actor's properties
 	AWeapon();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static AWeapon* CreateWeapon(AActor* WeaponOwner, UWeaponDataAsset* WeaponTemplate);
 
 private:
@@ -31,10 +32,24 @@ private:
 	void Fire_Internal();
 	void SpawnBullet();
 
-private: /**********  Fire Rate Functionality     ********/
+private: /**********  Fire Rate Functionality  ***********/
 	
 	bool bCanFire = true;
 	void ResetCanFire() { bCanFire = true; }
 	FTimerHandle FireHandle;
+	 
+		 
+public:  /**********  Reload Functionality  **************/
+	void Reload();
+private:
+	bool isReloading = false;
+	void Reload_Internal();
+	int32 Clip;
+public:
+	FORCEINLINE int32 GetCurrentClip() { return Clip; }
+private:
+	FTimerHandle ReloadHandle;
 
+	bool bReleasedFire = true;
+	FTimerHandle ReleaseHandle;
 };

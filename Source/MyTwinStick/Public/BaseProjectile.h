@@ -39,4 +39,9 @@ protected:
 					int32 OtherBodyIndex, 
 					bool bFromSweep, 
 					const FHitResult& SweepResult);
+
+private:
+	int32 Damage;
+public:
+	FORCEINLINE void SetDamage(int32 damage) { Damage = damage; }
 };
