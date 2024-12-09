@@ -10,7 +10,9 @@
 UENUM()
 enum class EW_FireType : uint8
 {
+	// continuous Weapon Fire while fire is held
 	Automatic UMETA(DisplayName = "Automatic"),
+	// Every shot needs to be pressed individually.
 	Semi      UMETA(DisplayName = "Semi-Automatic"),
 	FireType_MAX UMETA(Hidden)
 };
@@ -61,5 +63,18 @@ struct MYTWINSTICK_API FWeaponStats
 	// Maximum Clip Size
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reload", meta = (ClampMin = "1"))
 	int32 ClipSize = 8;
+
+};
+
+USTRUCT(BlueprintType)
+struct MYTWINSTICK_API FItemData
+{
+	GENERATED_BODY();
+	// Text used for Name of the item
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Name;
+	// Text used for description of the item
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Description;
 
 };

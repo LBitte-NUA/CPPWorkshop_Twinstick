@@ -7,6 +7,7 @@
 #include "Weapon.generated.h"
 
 struct FWeaponStats;
+struct FItemData;
 class UWeaponDataAsset;
 
 UCLASS()
@@ -22,8 +23,13 @@ public:
 	static AWeapon* CreateWeapon(AActor* WeaponOwner, UWeaponDataAsset* WeaponTemplate);
 
 private:
-	const FWeaponStats* Stats;
-	TSubclassOf<class ABaseProjectile> Projectile;
+	// Default Weapon Property Data
+	const FWeaponStats* Stats; // Weapon Stats (Damage, Fire Rate, etc.)
+	TSubclassOf<class ABaseProjectile> Projectile; // Projectile created by our weapon
+	const FItemData* Info; // Item Data (Name, Description)
+public:
+	FORCEINLINE auto GetWeaponInfo() { return Info; }
+
 
 public:
 	void Fire(); // fire the gun
@@ -52,4 +58,5 @@ private:
 
 	bool bReleasedFire = true;
 	FTimerHandle ReleaseHandle;
+
 };

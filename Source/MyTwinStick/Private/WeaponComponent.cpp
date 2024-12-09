@@ -3,6 +3,7 @@
 
 #include "WeaponComponent.h"
 #include "Weapon.h"
+#include "WeaponStats.h"
 
 // Sets default values for this component's properties
 UWeaponComponent::UWeaponComponent()
@@ -31,19 +32,22 @@ void UWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	/* TO DO:
-	*  ADD NAME TO WEAPONS SO IT CAN BE USED TO PRINTS IT
+	/*
+	if (Weapon != nullptr)
+		GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Cyan, FString::Printf(TEXT("Owner: %s, Weapon: %s, Clip: %i"), *GetOwner()->GetActorNameOrLabel(), *Weapon->GetWeaponInfo()->Name.ToString(), Weapon->GetCurrentClip()));
 	*/
-	if(Weapon != nullptr)
-		GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Cyan, FString::Printf(TEXT("Weapon: %s, Clip: %i"), *Weapon->GetName(), Weapon->GetCurrentClip()));
 }
+
 
 void UWeaponComponent::FireWeapon()
 {
-	if (Weapon != nullptr)
+	// Check if we have a weapon equipped
+	if (Weapon == nullptr)
 	{
-		Weapon->Fire();
+		UE_LOG(LogTemp, Warning, TEXT("%s: Fire Error - No weapon"), *GetOwner()->GetActorLabel());
+		return;
 	}
+	Weapon->Fire();
 }
 
 void UWeaponComponent::ReloadWeapon()

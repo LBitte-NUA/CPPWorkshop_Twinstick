@@ -23,23 +23,17 @@ AWeapon* AWeapon::CreateWeapon(AActor* WeaponOwner, UWeaponDataAsset* WeaponTemp
 	weapon->Projectile = WeaponTemplate->GetProjectile().LoadSynchronous();
 	weapon->Clip = weapon->Stats->ClipSize;
 
+	weapon->Info = WeaponTemplate->GetInfo();
+
 	return weapon;
 }
 
 // This Function is called by the weapon holder
 void AWeapon::Fire()
 {
-	// Do we have any bullets Currently?
-	if (Clip == 0)
-	{
-		Reload();
-	}
-
 	// Check our Fire Type
 	if (Stats->FireType == EW_FireType::Semi)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("HELD"));
-
 		// Start a short timer that is reset if we hold the fire button. (Never Releases while held)
 		GetWorldTimerManager().SetTimer(ReleaseHandle, FTimerDelegate::CreateLambda([&] { bReleasedFire = true; }), 0.01f, false);
 
@@ -47,6 +41,13 @@ void AWeapon::Fire()
 		if (!bReleasedFire) { return; }
 		// If we've released fire we can continue
 		bReleasedFire = false;
+	}
+
+	// Do we have any bullets Currently?
+	if (Clip == 0)
+	{
+		// Force Reload Attempt on firing empty gun
+		Reload();
 	}
 
 	// Can we Actuall Fire?
@@ -59,7 +60,7 @@ void AWeapon::Fire()
 void AWeapon::Fire_Internal()
 {
 
-	bCanFire = false; // After firing, set canFire to false
+	bCanFire = false; // After firing, set bCanFire to false
 
 	// Set a timer to resetcanfire after fire Interval cooldown.
 	GetWorld()->GetTimerManager().SetTimer(FireHandle, this, &AWeapon::ResetCanFire, Stats->FireInterval, false);
@@ -77,6 +78,7 @@ void AWeapon::Fire_Internal()
 		SpawnBullet();
 	}
 
+	// Decrease clip amount due to firing the weapon.
 	Clip--;
 }
 

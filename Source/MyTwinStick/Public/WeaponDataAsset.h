@@ -18,6 +18,9 @@ class MYTWINSTICK_API UWeaponDataAsset : public UDataAsset
 	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess = "True"))
+	FItemData WeaponInfo;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess = "True"))
 	FWeaponStats WeaponStats;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "True"))
@@ -26,4 +29,5 @@ private:
 public:
 	const FWeaponStats* GetWeaponStats() { return &WeaponStats; }
 	auto GetProjectile() { return Projectile; }
+	const FItemData* GetInfo() { return &WeaponInfo; }
 };

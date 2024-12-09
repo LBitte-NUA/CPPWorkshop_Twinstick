@@ -29,16 +29,21 @@ public:
 	UWeaponDataAsset* DefaultWeapon;
 
 private:
+	// Current Weapon Held
 	AWeapon* Weapon;
 
 public:
+	// Getter and Setter for Weapon
 	AWeapon* GetWeapon() { return Weapon; }
 	void SetWeapon(AWeapon* weapon) { Weapon = weapon; }
 
+	// Tell weapon to Fire
 	void FireWeapon();
+	// Tell Weapon to Reload
 	void ReloadWeapon();
 
 public:
+	// Replace current weapon with new weapon actor.
 	UFUNCTION(BlueprintCallable)
 	void EquipWeapon(AWeapon* newWeapon);
 };
