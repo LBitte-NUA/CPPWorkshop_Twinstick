@@ -128,17 +128,10 @@ void AWaveManager::SpawnEnemy()
 	}
 }
 
-void AWaveManager::OnEnemyDeath(AActor* Enemy, AActor* Dealer)
+void AWaveManager::OnEnemyDeath(AActor* Dealer)
 {
 	// Decrement Enemy count
 	EnemiesRemaining--;
-
-	// Find Enemy HealtHComponent
-	if (UHealthComponent* EnemyHealth = Enemy->FindComponentByClass<UHealthComponent>())
-	{
-		// Remove OnDeath Binding from a Dead Enemy
-		EnemyHealth->OnDeath.RemoveDynamic(this, &AWaveManager::OnEnemyDeath);
-	}
 
 	// Check if All Enemies are Spawned and Killed.
 	if (bSpawningComplete && EnemiesRemaining == 0)

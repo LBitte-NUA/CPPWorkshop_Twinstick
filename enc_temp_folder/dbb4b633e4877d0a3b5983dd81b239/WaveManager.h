@@ -30,7 +30,7 @@ private:
 	void SpawnEnemy();		// Spawn an Enemy
 
 	UFUNCTION()
-	void OnEnemyDeath(AActor* Enemy, AActor* Dealer);	// Bound to a Spawned Enemies Death.
+	void OnEnemyDeath(AActor* Dealer);	// Bound to a Spawned Enemies Death.
 
 	// The Data table used to spawn enemies.
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess = "True"))

@@ -68,7 +68,7 @@ void UHealthComponent::DecreaseHealth_Internal(float value)
 void UHealthComponent::Death()
 {
 	UE_LOG(LogTemp, Warning, TEXT("%s - Has Died"), *GetOwner()->GetActorNameOrLabel());
-	OnDeath.Broadcast(GetOwner(), nullptr);
+	OnDeath.Broadcast(GetOwner());
 }
 
 void UHealthComponent::ApplyDamage_Implementation(AActor* Dealer, float Damage)
