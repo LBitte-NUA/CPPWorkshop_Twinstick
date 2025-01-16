@@ -10,7 +10,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthModifiedSignature, float, newHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDeathSignature, AActor*, Self, AActor*, Attacker );
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDeathSignature, AActor*, Myself, AActor*, Attacker );
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MYTWINSTICK_API UHealthComponent : public UActorComponent, public IDamageInterface
@@ -47,9 +47,9 @@ public:
 
 private:
 	void IncreaseHealth_Internal(float value); // increase health by value
-	void DecreaseHealth_Internal(float value); // decrease health by value
+	void DecreaseHealth_Internal(AActor* Dealer, float value); // decrease health by value
 
-	void Death(); // Component ran out of health
+	void Death(AActor* Dealer); // Component ran out of health
 		
 public:
 	void ApplyDamage_Implementation(AActor* Dealer, float Damage) override;

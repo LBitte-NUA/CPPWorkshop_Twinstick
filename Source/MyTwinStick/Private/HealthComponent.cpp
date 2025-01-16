@@ -2,6 +2,7 @@
 
 
 #include "HealthComponent.h"
+#include "ScoreSubsystem.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -51,12 +52,12 @@ void UHealthComponent::IncreaseHealth_Internal(float value)
 	OnHealthModified.Broadcast(Health);
 }
 
-void UHealthComponent::DecreaseHealth_Internal(float value)
+void UHealthComponent::DecreaseHealth_Internal(AActor* Dealer, float value)
 {
 	if ((Health - value) < 0.f)
 	{
 		Health = 0;
-		Death();
+		Death(Dealer);
 	}
 	else
 	{
@@ -65,16 +66,28 @@ void UHealthComponent::DecreaseHealth_Internal(float value)
 	OnHealthModified.Broadcast(Health);
 }
 
-void UHealthComponent::Death()
+void UHealthComponent::Death(AActor* Dealer)
 {
 	UE_LOG(LogTemp, Warning, TEXT("%s - Has Died"), *GetOwner()->GetActorNameOrLabel());
-	OnDeath.Broadcast(GetOwner(), nullptr);
+	OnDeath.Broadcast(GetOwner(), Dealer);
 }
 
 void UHealthComponent::ApplyDamage_Implementation(AActor* Dealer, float Damage)
 {
 	if (GetOwner() == Dealer) { return; } // Don't do Damage to SELF!
 
-	DecreaseHealth_Internal(Damage);
+	DecreaseHealth_Internal(Dealer,Damage);
+
+	if (APawn* Player = Cast<APawn>(Dealer))
+	{
+		if (APlayerController* PCont = Cast<APlayerController>(Player->GetController()))
+		{
+			if (UScoreSubsystem* PlayerScore = ULocalPlayer::GetSubsystem<UScoreSubsystem>(PCont->GetLocalPlayer()))
+			{
+				PlayerScore->IncreaseScore(5);
+			}
+		}
+	}
+
 }
 
