@@ -64,7 +64,7 @@ protected: /* Declare our default components */
 		class USpringArmComponent* SpringArm;
 
 	// Forward Declare the Camera Component
-	UPROPERTY(EditAnywhere, Category = "Camera", meta = (AllowPrivateAccess = "True"))
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "True"))
 		class UCameraComponent* Camera;
 
 	

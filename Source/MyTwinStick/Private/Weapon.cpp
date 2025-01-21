@@ -59,6 +59,12 @@ void AWeapon::Fire()
 
 void AWeapon::Fire_Internal()
 {
+	if (isReloading)
+	{
+		GetWorldTimerManager().ClearTimer(ReloadHandle);
+		isReloading = false;
+		OnWeaponReloadEnd.Broadcast(GetCurrentClip());
+	}
 
 	bCanFire = false; // After firing, set bCanFire to false
 
@@ -80,6 +86,7 @@ void AWeapon::Fire_Internal()
 
 	// Decrease clip amount due to firing the weapon.
 	Clip--;
+	OnWeaponFired.Broadcast(Clip);
 }
 
 void AWeapon::SpawnBullet()
@@ -110,9 +117,11 @@ void AWeapon::Reload()
 {
 	// Do nothing if we are reloading
 	if (isReloading == true) { return; }
+	if (GetCurrentClip() == Stats->ClipSize) { return; }
 
 	isReloading = true;
 	GetWorldTimerManager().SetTimer(ReloadHandle, this, &AWeapon::Reload_Internal, Stats->ReloadInterval, false);
+	OnWeaponReloadBegin.Broadcast(GetWorldTimerManager().GetTimerRemaining(ReloadHandle));
 	//UE_LOG(LogTemp, Warning, TEXT("Reloading"));
 }
 
@@ -134,7 +143,7 @@ void AWeapon::Reload_Internal()
 	default:
 		break;
 	}
-
+	OnWeaponReloadEnd.Broadcast(GetCurrentClip());
 	isReloading = false;
 	// If Single clip Reload, Attempt to Continue Reloading.
 	if (Clip < Stats->ClipSize)

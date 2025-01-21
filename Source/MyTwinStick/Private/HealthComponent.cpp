@@ -84,6 +84,7 @@ void UHealthComponent::ApplyDamage_Implementation(AActor* Dealer, float Damage)
 		{
 			if (UScoreSubsystem* PlayerScore = ULocalPlayer::GetSubsystem<UScoreSubsystem>(PCont->GetLocalPlayer()))
 			{
+				// Add score to player when they do damage.
 				PlayerScore->IncreaseScore(5);
 			}
 		}

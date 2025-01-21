@@ -34,6 +34,7 @@ private:
 
 public:
 	// Getter and Setter for Weapon
+	UFUNCTION(BlueprintPure)
 	AWeapon* GetWeapon() { return Weapon; }
 	void SetWeapon(AWeapon* weapon) { Weapon = weapon; }
 

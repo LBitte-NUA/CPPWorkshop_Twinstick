@@ -10,6 +10,10 @@ struct FWeaponStats;
 struct FItemData;
 class UWeaponDataAsset;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponFiredSignature, int32, newAmmo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReloadBeginSignature, float, ReloadTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReloadEndSignature, int32, newClip);
+
 UCLASS()
 class MYTWINSTICK_API AWeapon : public AActor
 {
@@ -33,7 +37,8 @@ public:
 
 public:
 	void Fire(); // fire the gun
-
+	UPROPERTY(BlueprintAssignable)
+	FOnWeaponFiredSignature OnWeaponFired;
 private:
 	void Fire_Internal();
 	void SpawnBullet();
@@ -47,11 +52,16 @@ private: /**********  Fire Rate Functionality  ***********/
 		 
 public:  /**********  Reload Functionality  **************/
 	void Reload();
+	UPROPERTY(BlueprintAssignable)
+	FOnWeaponReloadBeginSignature OnWeaponReloadBegin;
+	UPROPERTY(BlueprintAssignable)
+	FOnWeaponReloadEndSignature OnWeaponReloadEnd;
 private:
 	bool isReloading = false;
 	void Reload_Internal();
 	int32 Clip;
 public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FORCEINLINE int32 GetCurrentClip() { return Clip; }
 private:
 	FTimerHandle ReloadHandle;
