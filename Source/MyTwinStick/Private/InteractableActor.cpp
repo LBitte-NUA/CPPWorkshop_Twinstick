@@ -28,6 +28,7 @@ void AInteractableActor::BeginPlay()
 
 void AInteractableActor::OnInteract(APlayerController* Player)
 {
+	if (isOpen == true) { return; }
 	//UE_LOG(LogTemp, Warning, TEXT("INTERACTED"));
 	if (Player == nullptr) { return; }
 	
@@ -51,7 +52,8 @@ void AInteractableActor::Interacted()
 		if(point != nullptr)
 			point->SetCurrentStatus(true);
 	}
-	Destroy();
+	isOpen = true;
+	Interacted_BP();
 }
 
 

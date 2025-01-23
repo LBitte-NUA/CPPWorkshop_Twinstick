@@ -38,8 +38,13 @@ public:
 
 private:
 	void Interacted();
+	bool isOpen = false;
 
 public:
 	UPROPERTY(EditAnywhere)
 	TArray<ASpawnPoint*> SpawnPoints;
+
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
+	void Interacted_BP();
 };
