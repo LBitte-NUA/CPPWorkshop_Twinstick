@@ -26,6 +26,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void IncreaseScore(int32 Value);
 
+	UFUNCTION(BlueprintCallable)
+	void DecreaseScore(int32 Value);
+
 	UPROPERTY(BlueprintAssignable)
 	FOnScoreUpdatedSignature OnScoreUpdated;
 };

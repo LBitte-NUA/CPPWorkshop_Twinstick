@@ -20,3 +20,9 @@ void UScoreSubsystem::IncreaseScore(int32 Value)
 	OnScoreUpdated.Broadcast(Score);
 	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, TEXT("Score Increased"));
 }
+
+void UScoreSubsystem::DecreaseScore(int32 Value)
+{
+	Score -= Value;
+	OnScoreUpdated.Broadcast(Score);
+}

@@ -7,6 +7,7 @@
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "InteractInterface.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -65,6 +66,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Attack); // Bind Fire action to Attack
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ABaseCharacter::Attack);
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &ABaseCharacter::Reload); // Bind Reload Action to Reload
+	
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &APlayerCharacter::Interact);
 	}
 }
 
@@ -72,7 +75,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::Move(const FInputActionValue& value)
 {
 	FVector2D movementInput = value.Get<FVector2D>();
-
+		
 	AddMovementInput(FVector(movementInput.Y, movementInput.X, 0));
 }
 
@@ -86,6 +89,31 @@ void APlayerCharacter::Look(const FInputActionValue& value)
 
 	// Set the Control rotation to our target rotation
 	Controller->SetControlRotation(TargetRot);
+}
+
+void APlayerCharacter::Interact()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Interact"));
+	FHitResult hit;
+
+	FVector StartLocation = GetActorLocation();
+	FVector EndLocation = StartLocation + (GetActorForwardVector() * 100.f);
+
+	GetWorld()->LineTraceSingleByChannel(hit, StartLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel2);
+
+	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 5.f, false);
+	if (hit.bBlockingHit)
+	{
+		if (hit.GetActor())
+		{
+			if (IInteractInterface* Interactable = Cast<IInteractInterface>(hit.GetActor()))
+			{
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Send Call"));
+				APlayerController* PCont = Cast<APlayerController>(GetController());
+				Interactable->OnInteract(PCont);
+			}
+		}
+	}
 }
 
 

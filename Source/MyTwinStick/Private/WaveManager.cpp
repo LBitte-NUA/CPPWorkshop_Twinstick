@@ -5,6 +5,8 @@
 #include "WaveData.h"
 #include "BaseCharacter.h"
 #include "HealthComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "SpawnPoint.h"
 
 // Sets default values
 AWaveManager::AWaveManager()
@@ -18,6 +20,8 @@ AWaveManager::AWaveManager()
 void AWaveManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InitializeSpawnPoints();
 
 	// Check if WaveDataTable is set
 	if (WaveDataTable)
@@ -101,10 +105,22 @@ void AWaveManager::SpawnEnemy()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	// Generate Random Spawn Location Vector 
+	/*
 	FVector Location = FVector(FMath::FRandRange(-2000.f, 2000.f), // X
 								FMath::FRandRange(-2000.f, 2000.f),// Y
 										200.f);					   // Z
 	FRotator Rotation = FRotator::ZeroRotator;
+	*/
+
+	FVector Location = FVector(0.f, 0.f, 500.f);
+	FRotator Rotation = FRotator::ZeroRotator;
+
+	
+	if (ASpawnPoint* SPoint = GetRandomSPoint())
+	{
+		Location = SPoint->GetActorLocation();
+		Rotation = SPoint->GetActorRotation();
+	}
 
 	// Spawn the Enemy
 	ABaseCharacter* Enemy = GetWorld()->SpawnActor<ABaseCharacter>(CurrentWave->Sections[SectionInt].Enemy, Location, Rotation, SpawnParams);
@@ -145,4 +161,43 @@ void AWaveManager::OnEnemyDeath(AActor* Enemy, AActor* Dealer)
 	{
 		EndWave();
 	}
+}
+
+void AWaveManager::InitializeSpawnPoints()
+{
+	TArray<AActor*> SpawnPoints;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawnPoint::StaticClass(), SpawnPoints);
+	for (auto Point : SpawnPoints)
+	{
+		if (ASpawnPoint* SPoint = Cast<ASpawnPoint>(Point))
+		{
+			if (SPoint->GetCurrentStatus())
+			{
+				ActiveSpawnPoints.Add(SPoint);
+			}
+			SPoint->OnStatusUpdated.BindDynamic(this, &AWaveManager::OnPointStatusChanged);
+		}
+	}
+}
+
+void AWaveManager::OnPointStatusChanged(bool NewStatus, ASpawnPoint* SpawnPoint)
+{
+	if (NewStatus)
+	{
+		ActiveSpawnPoints.Add(SpawnPoint);
+	}
+	else
+	{
+		ActiveSpawnPoints.Remove(SpawnPoint);
+	}
+}
+
+ASpawnPoint* AWaveManager::GetRandomSPoint()
+{
+	int32 randomInt = FMath::RandRange(0, ActiveSpawnPoints.Num()-1);
+	if (ActiveSpawnPoints.IsValidIndex(randomInt))
+	{
+		return ActiveSpawnPoints[randomInt];
+	}
+	return nullptr;
 }

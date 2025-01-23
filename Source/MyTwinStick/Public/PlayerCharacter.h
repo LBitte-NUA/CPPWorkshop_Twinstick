@@ -49,12 +49,16 @@ private: /* Declare our Input Actions & Mappings */
 	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
 	UInputAction* ReloadAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "True"))
+	UInputAction* InteractAction;
+
 		/* Declare our Input functions */
 
 	void Move(const FInputActionValue& value);
 
 	void Look(const FInputActionValue& value);
 
+	void Interact();
 
 
 protected: /* Declare our default components */

@@ -7,6 +7,7 @@
 #include "WaveManager.generated.h"
 
 struct FWaveData;
+class ASpawnPoint;
 
 UCLASS()
 class MYTWINSTICK_API AWaveManager : public AActor
@@ -54,5 +55,15 @@ private:
 	// CurrentWaveInt = 3 
 	// Returns 'Wave_3'
 	FORCEINLINE FName GetCurrentWaveName() { return FName(*(RowName + FString::FromInt(CurrentWaveInt))); }
+
+	/********** Spawn Points ***********/
+	UPROPERTY()
+	TArray<ASpawnPoint*> ActiveSpawnPoints;
+	void InitializeSpawnPoints();
+
+	UFUNCTION()
+	void OnPointStatusChanged(bool NewStatus, ASpawnPoint* SpawnPoint);
+
+	ASpawnPoint* GetRandomSPoint();
 
 };
