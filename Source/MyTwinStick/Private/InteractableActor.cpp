@@ -13,6 +13,7 @@ AInteractableActor::AInteractableActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	RootComponent = BoxCollider;
+	// ECC_GameTraceChannel2 is the 2nd Custom Object Channel in Project Settings.
 	BoxCollider->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel2);
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
@@ -28,10 +29,12 @@ void AInteractableActor::BeginPlay()
 
 void AInteractableActor::OnInteract(APlayerController* Player)
 {
-	if (isOpen == true) { return; }
-	//UE_LOG(LogTemp, Warning, TEXT("INTERACTED"));
-	if (Player == nullptr) { return; }
+	if (isOpen == true) { return; } 	// If Already Open do nothing
+
+	if (Player == nullptr) { return; } 	// If Player Controller Invalid do nothing
 	
+	// Find Player Score Subsysten
+	// NOTE: Include the ScoreSubsystem.h
 	UScoreSubsystem* PlayerScore = ULocalPlayer::GetSubsystem<UScoreSubsystem>(Player->GetLocalPlayer());
 	if (ScoreRequirement <= PlayerScore->Score)
 	{
@@ -47,13 +50,15 @@ void AInteractableActor::OnInteract(APlayerController* Player)
 
 void AInteractableActor::Interacted()
 {
+	// Loop through each SpawnPoint
 	for (ASpawnPoint* point : SpawnPoints)
 	{
+		// If Reference is valid 'Activate' the Spawnpoint
 		if(point != nullptr)
 			point->SetCurrentStatus(true);
 	}
 	isOpen = true;
-	Interacted_BP();
+	Interacted_BP(); // Tell BP to do visuals
 }
 
 

@@ -94,27 +94,36 @@ void APlayerCharacter::Look(const FInputActionValue& value)
 void APlayerCharacter::Interact()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Interact"));
-	FHitResult hit;
 
-	FVector StartLocation = GetActorLocation();
-	FVector EndLocation = StartLocation + (GetActorForwardVector() * 100.f);
+	FHitResult hit; // Container to Store our 'hit' Return from the Line Trace
 
+	FVector StartLocation = GetActorLocation();								// Start Location of Line Trace
+	FVector EndLocation = StartLocation + (GetActorForwardVector() * 100.f);// End Location of Line Trace
+
+	// The Visual for Our Line Trace
+	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 5.f, false);
+
+	// The Actual Line Trace Function
 	GetWorld()->LineTraceSingleByChannel(hit, StartLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel2);
 
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 5.f, false);
-	if (hit.bBlockingHit)
+	if (hit.bBlockingHit) // Check if we've hit 'something'
 	{
-		if (hit.GetActor())
+ 		if (hit.GetActor()) // Check if we've hit an 'Actor'
 		{
+			// Check if the hit Actor has the Interact Interface.
 			if (IInteractInterface* Interactable = Cast<IInteractInterface>(hit.GetActor()))
 			{
 				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Send Call"));
 				APlayerController* PCont = Cast<APlayerController>(GetController());
+
+				// The Parameter for the Interface is PlayerController so we send it with the call.
 				Interactable->OnInteract(PCont);
 			}
 		}
 	}
 }
+
+
 
 
 

@@ -7,4 +7,5 @@
 
 void IInteractInterface::OnInteract(APlayerController* Player)
 {
+	// Default Response if not overriden
 }

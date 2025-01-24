@@ -57,11 +57,12 @@ private:
 	FORCEINLINE FName GetCurrentWaveName() { return FName(*(RowName + FString::FromInt(CurrentWaveInt))); }
 
 	/********** Spawn Points ***********/
-	UPROPERTY()
+
+	UPROPERTY() // Declare a UPROPERTY to be garbage collected
 	TArray<ASpawnPoint*> ActiveSpawnPoints;
 	void InitializeSpawnPoints();
 
-	UFUNCTION()
+	UFUNCTION() // Bound to SpawnPoint Status Update Delegate
 	void OnPointStatusChanged(bool NewStatus, ASpawnPoint* SpawnPoint);
 
 	ASpawnPoint* GetRandomSPoint();

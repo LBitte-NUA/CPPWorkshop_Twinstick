@@ -6,10 +6,11 @@
 #include "Engine/TargetPoint.h"
 #include "SpawnPoint.generated.h"
 
-/**
- * 
- */
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnSpawnPointStatusUpdatedSignature, bool, NewStatus, ASpawnPoint*, SpawnPoint);
+// Delegate called when the Spawnpoints Status has been updated.
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+		FOnSpawnPointStatusUpdatedSignature,// Signature
+		bool, NewStatus,					// bCurrentStatus 	
+		ASpawnPoint*, SpawnPoint);			// This Spawnpoint
 
 UCLASS()
 class MYTWINSTICK_API ASpawnPoint : public ATargetPoint
@@ -22,10 +23,11 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess = "True"))
-	bool bCurrentStatus;
+	bool bCurrentStatus; // Should the Spawnpoint be used? (Yes/No)
 
-public:
-	bool GetCurrentStatus() { return bCurrentStatus; }
+public: // Getter & Setter
+	FORCEINLINE bool GetCurrentStatus() { return bCurrentStatus; }
 	void SetCurrentStatus(bool newStatus);
-
 };
+
+

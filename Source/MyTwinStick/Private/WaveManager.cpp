@@ -21,6 +21,7 @@ void AWaveManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Register Spawnpoints
 	InitializeSpawnPoints();
 
 	// Check if WaveDataTable is set
@@ -105,19 +106,14 @@ void AWaveManager::SpawnEnemy()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	// Generate Random Spawn Location Vector 
-	/*
-	FVector Location = FVector(FMath::FRandRange(-2000.f, 2000.f), // X
-								FMath::FRandRange(-2000.f, 2000.f),// Y
-										200.f);					   // Z
-	FRotator Rotation = FRotator::ZeroRotator;
-	*/
-
-	FVector Location = FVector(0.f, 0.f, 500.f);
+	// Set Default Values
+	FVector Location = FVector(0.f, 0.f, 500.f); // Default Spawn Location if SpawnPoints don't exist.
 	FRotator Rotation = FRotator::ZeroRotator;
 
-	
+	// Check if we've successfuly found a Random SpawnPoint
 	if (ASpawnPoint* SPoint = GetRandomSPoint())
 	{
+		// Replace Values with the SpawnPoint ones.
 		Location = SPoint->GetActorLocation();
 		Rotation = SPoint->GetActorRotation();
 	}
@@ -165,36 +161,43 @@ void AWaveManager::OnEnemyDeath(AActor* Enemy, AActor* Dealer)
 
 void AWaveManager::InitializeSpawnPoints()
 {
-	TArray<AActor*> SpawnPoints;
+	TArray<AActor*> SpawnPoints; // Containter for GetAllActorOfClass()
+
+	// NOTE1: To use UGameplayStatics we must #include "Kismet/GameplayStatics.h"
+	// NOTE2: Be sure to #include "SpawnPoint.h" 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawnPoint::StaticClass(), SpawnPoints);
-	for (auto Point : SpawnPoints)
+	                                 /*  (World Context,   Class to Find,  Container to Store);  */
+
+	for (auto Point : SpawnPoints) // We Iterate through all of the Spawnpoints
 	{
-		if (ASpawnPoint* SPoint = Cast<ASpawnPoint>(Point))
+		if (ASpawnPoint* SPoint = Cast<ASpawnPoint>(Point)) // Recognise the Actor as a Spawnpoint
 		{
-			if (SPoint->GetCurrentStatus())
+			if (SPoint->GetCurrentStatus()) // Check Default Status
 			{
-				ActiveSpawnPoints.Add(SPoint);
+				ActiveSpawnPoints.Add(SPoint); // Add to Active Spawn points if Active
 			}
+			// Bind to All Spawnpoints
 			SPoint->OnStatusUpdated.BindDynamic(this, &AWaveManager::OnPointStatusChanged);
 		}
 	}
 }
 
+// Bound to SpawnPoints Update Delegate (Hence the Same Parameters)
 void AWaveManager::OnPointStatusChanged(bool NewStatus, ASpawnPoint* SpawnPoint)
 {
 	if (NewStatus)
-	{
-		ActiveSpawnPoints.Add(SpawnPoint);
-	}
+		ActiveSpawnPoints.AddUnique(SpawnPoint);// Status True = Add to Active
 	else
-	{
-		ActiveSpawnPoints.Remove(SpawnPoint);
-	}
+		ActiveSpawnPoints.Remove(SpawnPoint);	// Status False = Remove from Active
 }
 
+// Return a Random SpawnPoint from the Array.
 ASpawnPoint* AWaveManager::GetRandomSPoint()
 {
+	// Get a Random Integer from 0 to ElementsInArray - 1 
+	// -1 as we are looking for index
 	int32 randomInt = FMath::RandRange(0, ActiveSpawnPoints.Num()-1);
+	// Check if the Return is valid
 	if (ActiveSpawnPoints.IsValidIndex(randomInt))
 	{
 		return ActiveSpawnPoints[randomInt];
