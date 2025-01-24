@@ -36,7 +36,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "True"))
 	float Health = MaxHealth;
 
+#if WITH_EDITOR
 	void PostEditChangeProperty(FPropertyChangedEvent& ChangedProperty) override;
+#endif
 
 public:
 	void SetMaxHealth(float value) { MaxHealth = value; } // Set mmax Health

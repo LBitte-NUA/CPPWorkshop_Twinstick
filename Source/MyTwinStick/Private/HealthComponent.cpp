@@ -32,12 +32,14 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
+#if WITH_EDITOR
 void UHealthComponent::PostEditChangeProperty(FPropertyChangedEvent& ChangedProperty)
 {
 	Super::PostEditChangeProperty(ChangedProperty);
 
 	ResetHealth();
 }
+#endif
 
 void UHealthComponent::IncreaseHealth_Internal(float value)
 {

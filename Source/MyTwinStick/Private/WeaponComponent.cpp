@@ -44,7 +44,9 @@ void UWeaponComponent::FireWeapon()
 	// Check if we have a weapon equipped
 	if (Weapon == nullptr)
 	{
+#if WITH_EDITOR
 		UE_LOG(LogTemp, Warning, TEXT("%s: Fire Error - No weapon"), *GetOwner()->GetActorLabel());
+#endif
 		return;
 	}
 	Weapon->Fire();

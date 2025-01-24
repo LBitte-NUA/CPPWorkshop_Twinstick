@@ -19,7 +19,7 @@ ABaseCharacter::ABaseCharacter()
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>(TEXT("Weapon Component"));
 
 	// Show the direction the character is facing.
-	GetArrowComponent()->SetHiddenInGame(false);
+	//GetArrowComponent()->SetHiddenInGame(false);
 }
 
 // Called when the game starts or when spawned

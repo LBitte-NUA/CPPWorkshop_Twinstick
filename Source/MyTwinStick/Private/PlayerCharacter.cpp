@@ -34,7 +34,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetArrowComponent()->SetHiddenInGame(false); // Show the directional arrow for our Character
+	//GetArrowComponent()->SetHiddenInGame(false); // Show the directional arrow for our Character
 }
 
 // Called every frame
@@ -67,7 +67,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ABaseCharacter::Attack);
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &ABaseCharacter::Reload); // Bind Reload Action to Reload
 	
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &APlayerCharacter::Interact);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &APlayerCharacter::Interact); // Bind Interact Action to Interact
 	}
 }
 
