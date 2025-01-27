@@ -9,12 +9,12 @@
 class UWeaponDataAsset;
 class AWeapon;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class MYTWINSTICK_API UWeaponComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UWeaponComponent();
 
@@ -24,7 +24,7 @@ protected:
 
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-public:	
+public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UWeaponDataAsset> DefaultWeapon;
 
@@ -35,6 +35,8 @@ private:
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetDefaultWeapon(UWeaponDataAsset* newDefaultWeapon);
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UWeaponDataAsset* GetDefaultWeapon() { return DefaultWeapon; }
 
 public:
 	// Getter and Setter for Weapon
@@ -51,7 +53,5 @@ public:
 	// Replace current weapon with new weapon actor.
 	UFUNCTION(BlueprintCallable)
 	void EquipWeapon(AWeapon* newWeapon);
-	
-	UFUNCTION(BlueprintCallable)
-	void InitWeapon(UWeaponDataAsset* StarterWeapon = nullptr);
+
 };

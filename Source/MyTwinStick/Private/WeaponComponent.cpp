@@ -22,7 +22,11 @@ void UWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InitWeapon();
+	if (DefaultWeapon != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Create Weapon"));
+		Weapon = AWeapon::CreateWeapon(GetOwner(), GetOwner(), DefaultWeapon);
+	}
 }
 
 void UWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -73,24 +77,6 @@ void UWeaponComponent::EquipWeapon(AWeapon* newWeapon)
 	Weapon = newWeapon;
 }
 
-void UWeaponComponent::InitWeapon(UWeaponDataAsset* StarterWeapon)
-{
-	if (IsValid(StarterWeapon))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Override Default"));
-		DefaultWeapon = StarterWeapon;
-	}
-
-	if (IsValid(DefaultWeapon))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Create Weapon"));
-		EquipWeapon(Weapon = AWeapon::CreateWeapon(GetOwner(), GetOwner(), DefaultWeapon));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Invalid Default"));
-	}
-}
 
 
 

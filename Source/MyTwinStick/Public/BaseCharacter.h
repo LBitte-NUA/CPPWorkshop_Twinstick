@@ -29,10 +29,10 @@ public:
 protected:
 	//The Health Component
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = "True"))
-	class UHealthComponent* HealthComponent;
+	class UHealthComponent* HealthComponent = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "True"))
-	class UWeaponComponent* WeaponComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "True"))
+	class UWeaponComponent* WeaponComponent = nullptr;
 
 public:
 	// Our Attack/Reload Functions which can be called and overwritten in BP
