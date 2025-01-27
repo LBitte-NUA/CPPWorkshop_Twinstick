@@ -26,11 +26,15 @@ protected:
 
 public:	
 	UPROPERTY(EditAnywhere)
-	UWeaponDataAsset* DefaultWeapon;
+	TObjectPtr<UWeaponDataAsset> DefaultWeapon;
 
 private:
 	// Current Weapon Held
-	AWeapon* Weapon;
+	TObjectPtr<AWeapon> Weapon;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetDefaultWeapon(UWeaponDataAsset* newDefaultWeapon);
 
 public:
 	// Getter and Setter for Weapon
@@ -47,4 +51,7 @@ public:
 	// Replace current weapon with new weapon actor.
 	UFUNCTION(BlueprintCallable)
 	void EquipWeapon(AWeapon* newWeapon);
+	
+	UFUNCTION(BlueprintCallable)
+	void InitWeapon(UWeaponDataAsset* StarterWeapon = nullptr);
 };

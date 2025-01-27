@@ -13,11 +13,12 @@ AWeapon::AWeapon()
 
 }
 
-AWeapon* AWeapon::CreateWeapon(AActor* WeaponOwner, UWeaponDataAsset* WeaponTemplate)
+AWeapon* AWeapon::CreateWeapon(const UObject* WorldContextObject, AActor* WeaponOwner, UWeaponDataAsset* WeaponTemplate)
 {
 	FActorSpawnParameters spawnParams;
 	spawnParams.Owner = WeaponOwner;
-	AWeapon* weapon = WeaponOwner->GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass(), spawnParams);
+	UWorld* World = WorldContextObject->GetWorld();
+	AWeapon* weapon = World->SpawnActor<AWeapon>(AWeapon::StaticClass(), spawnParams);
 
 	weapon->Stats = WeaponTemplate->GetWeaponStats();
 	weapon->Projectile = WeaponTemplate->GetProjectile().LoadSynchronous();

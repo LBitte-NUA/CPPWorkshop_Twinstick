@@ -2,6 +2,7 @@
 
 
 #include "WeaponComponent.h"
+#include "WeaponDataAsset.h"
 #include "Weapon.h"
 #include "WeaponStats.h"
 
@@ -21,11 +22,7 @@ void UWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (DefaultWeapon != nullptr)
-	{
-		Weapon = AWeapon::CreateWeapon(GetOwner(), DefaultWeapon);
-	}
-	
+	InitWeapon();
 }
 
 void UWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -38,6 +35,15 @@ void UWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	*/
 }
 
+
+void UWeaponComponent::SetDefaultWeapon(UWeaponDataAsset* newDefaultWeapon)
+{
+	if (IsValid(newDefaultWeapon))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Default Updated"));
+		DefaultWeapon = newDefaultWeapon;
+	}
+}
 
 void UWeaponComponent::FireWeapon()
 {
@@ -62,8 +68,29 @@ void UWeaponComponent::ReloadWeapon()
 
 void UWeaponComponent::EquipWeapon(AWeapon* newWeapon)
 {
-	Weapon->Destroy();
+	if(IsValid(Weapon))
+		Weapon->Destroy();
 	Weapon = newWeapon;
 }
+
+void UWeaponComponent::InitWeapon(UWeaponDataAsset* StarterWeapon)
+{
+	if (IsValid(StarterWeapon))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Override Default"));
+		DefaultWeapon = StarterWeapon;
+	}
+
+	if (IsValid(DefaultWeapon))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Create Weapon"));
+		EquipWeapon(Weapon = AWeapon::CreateWeapon(GetOwner(), GetOwner(), DefaultWeapon));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid Default"));
+	}
+}
+
 
 

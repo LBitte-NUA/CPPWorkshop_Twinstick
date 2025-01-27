@@ -23,8 +23,8 @@ public:
 	// Sets default values for this actor's properties
 	AWeapon();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	static AWeapon* CreateWeapon(AActor* WeaponOwner, UWeaponDataAsset* WeaponTemplate);
+	UFUNCTION(BlueprintCallable,BlueprintPure, Category = "Weapons", meta = (WorldContext = "WorldContextObject"))
+	static AWeapon* CreateWeapon(const UObject* WorldContextObject, AActor* WeaponOwner, UWeaponDataAsset* WeaponTemplate);
 
 private:
 	// Default Weapon Property Data

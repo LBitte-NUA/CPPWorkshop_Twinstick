@@ -104,6 +104,7 @@ void APlayerCharacter::Interact()
 	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 5.f, false);
 
 	// The Actual Line Trace Function
+	// ECollisionChannel::ECC_GameTraceChannel2 == 'Interactable' in Project Settings -> Collison Channels
 	GetWorld()->LineTraceSingleByChannel(hit, StartLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel2);
 
 	if (hit.bBlockingHit) // Check if we've hit 'something'

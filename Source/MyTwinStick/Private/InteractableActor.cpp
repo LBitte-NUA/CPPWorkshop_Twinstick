@@ -14,6 +14,7 @@ AInteractableActor::AInteractableActor()
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	RootComponent = BoxCollider;
 	// ECC_GameTraceChannel2 is the 2nd Custom Object Channel in Project Settings.
+	// Called 'Interactable' in project settings Collison Channels
 	BoxCollider->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel2);
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
