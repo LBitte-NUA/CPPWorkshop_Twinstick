@@ -11,7 +11,7 @@ class ABaseProjectile;
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class MYTWINSTICK_API UWeaponDataAsset : public UDataAsset
 {
 	GENERATED_BODY()

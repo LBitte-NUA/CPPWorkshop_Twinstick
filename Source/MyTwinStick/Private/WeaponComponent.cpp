@@ -22,11 +22,7 @@ void UWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (DefaultWeapon != nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Create Weapon"));
-		Weapon = AWeapon::CreateWeapon(GetOwner(), GetOwner(), DefaultWeapon);
-	}
+	//InitialiseWeapon();
 }
 
 void UWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -75,6 +71,15 @@ void UWeaponComponent::EquipWeapon(AWeapon* newWeapon)
 	if(IsValid(Weapon))
 		Weapon->Destroy();
 	Weapon = newWeapon;
+}
+
+void UWeaponComponent::InitialiseWeapon()
+{
+	if (DefaultWeapon != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Create Weapon"));
+		Weapon = AWeapon::CreateWeapon(GetOwner(), GetOwner(), DefaultWeapon);
+	}
 }
 
 

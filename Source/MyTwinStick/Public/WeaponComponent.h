@@ -30,7 +30,8 @@ public:
 
 private:
 	// Current Weapon Held
-	TObjectPtr<AWeapon> Weapon;
+	UPROPERTY()
+	TObjectPtr<AWeapon> Weapon = nullptr;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -53,5 +54,8 @@ public:
 	// Replace current weapon with new weapon actor.
 	UFUNCTION(BlueprintCallable)
 	void EquipWeapon(AWeapon* newWeapon);
+
+	UFUNCTION(BlueprintCallable)
+	void InitialiseWeapon();
 
 };
