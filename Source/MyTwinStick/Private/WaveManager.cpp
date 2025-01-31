@@ -121,12 +121,15 @@ void AWaveManager::SpawnEnemy()
 	// Spawn the Enemy
 	ABaseCharacter* Enemy = GetWorld()->SpawnActor<ABaseCharacter>(CurrentWave->Sections[SectionInt].Enemy, Location, Rotation, SpawnParams);
 
-	// Find if Enemy has Health Component
-	if (UHealthComponent* EnemyHealth = Enemy->FindComponentByClass<UHealthComponent>())
+	if (IsValid(Enemy))
 	{
-		// Bind to its Death and Increment How many enemies are currently alive.
-		EnemyHealth->OnDeath.AddDynamic(this, &AWaveManager::OnEnemyDeath);
-		EnemiesRemaining++;
+		// Find if Enemy has Health Component
+		if (UHealthComponent* EnemyHealth = Enemy->FindComponentByClass<UHealthComponent>())
+		{
+			// Bind to its Death and Increment How many enemies are currently alive.
+			EnemyHealth->OnDeath.AddDynamic(this, &AWaveManager::OnEnemyDeath);
+			EnemiesRemaining++;
+		}
 	}
 
 	EnemiesSpawned++; // Increase enemy spawn count

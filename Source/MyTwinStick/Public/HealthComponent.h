@@ -68,4 +68,22 @@ private:
 
 public:
 	ETeam GetTeam_Implementation() override { return Team; }
+
+
+// Health Regen
+
+public:
+	// Amount Regened Per Second
+	UPROPERTY(EditAnywhere)
+	float HealthRegen = 0.f;
+
+	UPROPERTY(Editanywhere)
+	float RegenResetTime = 0.f;
+
+private:
+	void StartRegen();
+	void StopRegen();
+	FTimerHandle RegenHandle;
+	FTimerHandle RegenResetHandle;
+
 };

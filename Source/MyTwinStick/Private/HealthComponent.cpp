@@ -79,7 +79,7 @@ void UHealthComponent::ApplyDamage_Implementation(AActor* Dealer, float Damage)
 	if (GetOwner() == Dealer) { return; } // Don't do Damage to SELF!
 
 	DecreaseHealth_Internal(Dealer,Damage);
-
+	/*
 	if (APawn* Player = Cast<APawn>(Dealer))
 	{
 		if (APlayerController* PCont = Cast<APlayerController>(Player->GetController()))
@@ -91,6 +91,19 @@ void UHealthComponent::ApplyDamage_Implementation(AActor* Dealer, float Damage)
 			}
 		}
 	}
+	*/
 
+}
+
+// TODO: Finish Health REGEN!!
+void UHealthComponent::StartRegen()
+{
+	GetWorld()->GetTimerManager().SetTimer(RegenHandle, FTimerDelegate::CreateLambda([&] {IncreaseHealth_Internal(HealthRegen);}), 1.0f, false);
+}
+
+void UHealthComponent::StopRegen()
+{
+	GetWorld()->GetTimerManager().PauseTimer(RegenHandle);
+	GetWorld()->GetTimerManager().SetTimer(RegenResetHandle, FTimerDelegate::CreateLambda([&] {GetWorld()->GetTimerManager().UnPauseTimer(RegenHandle);}), RegenResetTime, false);
 }
 

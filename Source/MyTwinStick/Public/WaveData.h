@@ -48,7 +48,7 @@ struct MYTWINSTICK_API FWaveData : public FTableRowBase
 	GENERATED_BODY()
 
 	// Array of wave sections to spawn every wave.
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, meta=(ShowOnlyInnerProperties))
 	TArray<FWaveSection> Sections;
 
 	// Time at the end of the wave before next wave starts.
