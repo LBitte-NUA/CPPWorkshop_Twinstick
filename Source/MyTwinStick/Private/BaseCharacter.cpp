@@ -6,6 +6,8 @@
 #include "Components/ArrowComponent.h"
 #include "HealthComponent.h"
 #include "WeaponComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -13,11 +15,15 @@ ABaseCharacter::ABaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	RootComponent = CapsuleCollider;
+
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
 	HealthComponent->SetMaxHealth(100.f);
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>(TEXT("Weapon Component"));
 
+	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("Movement Component"));
 	// Show the direction the character is facing.
 	//GetArrowComponent()->SetHiddenInGame(false);
 }

@@ -75,7 +75,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::Move(const FInputActionValue& value)
 {
 	FVector2D movementInput = value.Get<FVector2D>();
-		
+
 	AddMovementInput(FVector(movementInput.Y, movementInput.X, 0));
 }
 

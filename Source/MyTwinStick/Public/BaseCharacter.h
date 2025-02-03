@@ -9,7 +9,7 @@
 
 
 UCLASS(Abstract)
-class MYTWINSTICK_API ABaseCharacter : public ACharacter 
+class MYTWINSTICK_API ABaseCharacter : public APawn 
 {
 	GENERATED_BODY()
 
@@ -34,6 +34,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "True"))
 	class UWeaponComponent* WeaponComponent = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta= (AllowPrivateAccess = "True"))
+	class UFloatingPawnMovement* MovementComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta= (AllowPrivateAccess = "True"))
+	class UCapsuleComponent* CapsuleCollider = nullptr;
 public:
 	// Our Attack/Reload Functions which can be called and overwritten in BP
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
