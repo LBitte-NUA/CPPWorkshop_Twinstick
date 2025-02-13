@@ -94,7 +94,7 @@ void AWeapon::SpawnBullet()
 {
 	// create the bullet
 
-	if (Projectile == nullptr) { return; } // Return if projectile is invalid
+	if (Projectile == nullptr) 	{return; } // Return if projectile is invalid
 
 	// Create the Transform parameters for our projectile spawn.
 	FVector Location = GetOwner()->GetActorLocation();
@@ -102,7 +102,6 @@ void AWeapon::SpawnBullet()
 	FVector AimOffset = FVector(FMath::RandRange(-Stats->BulletAimOffset, Stats->BulletAimOffset), // X
 								FMath::RandRange(-Stats->BulletAimOffset, Stats->BulletAimOffset), // Y
 								0.f);												               // Z
-
 
 	Direction += AimOffset;
 

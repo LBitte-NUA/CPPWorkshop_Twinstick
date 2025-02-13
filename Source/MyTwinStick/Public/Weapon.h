@@ -29,6 +29,7 @@ public:
 private:
 	// Default Weapon Property Data
 	const FWeaponStats* Stats; // Weapon Stats (Damage, Fire Rate, etc.)
+	UPROPERTY()
 	TSubclassOf<class ABaseProjectile> Projectile; // Projectile created by our weapon
 	const FItemData* Info; // Item Data (Name, Description)
 public:
